@@ -15,14 +15,14 @@ RUN apt-get update && \
 
 # Moin Moin version.
 ENV MM_VERSION 1.9.8
-ENV MM_CSUM 4a616d12a03f51787ac996392f9279d0398bfb3b
+ENV MM_CSUM a74ba7fd8cf09b9e8415a4c45d7389ea910c09932da50359ea9796e3a30911a6
 
 # Download MoinMoin
 RUN curl -LOC- -s \
       http://static.moinmo.in/files/moin-$MM_VERSION.tar.gz && \
-    sha256sum moin-$MM_VERSION.tar.gz | grep -q $MM_SUM && \
-    tar xzvf moin-$MM_VERSION.tar.gz --strip-components=1
+    sha256sum moin-$MM_VERSION.tar.gz | grep -q $MM_CSUM && \
+    tar xzvf moin-$MM_VERSION.tar.gz
 
 # Install MoinMoin.
-RUN (cd moinmoin-$MM_VERSION && \
+RUN (cd moin-$MM_VERSION && \
      python setup.py install --force --prefix=/usr/local)
