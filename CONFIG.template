@@ -1,0 +1,5 @@
+# This file contains installation-specific settings.
+
+# SSL certificates
+export WEBSITE_DIR=
+export CERTIFICATE_DIR=
