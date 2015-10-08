@@ -33,26 +33,30 @@ RUN (cd moin && \
 
 # Create a new wiki instance.
 RUN mkdir /opt/moin && \
-    cp -R /usr/local/share/moin/config /opt/moin/ && \
-    cp -R /usr/local/share/moin/data /opt/moin/ && \
-    cp -R /usr/local/share/moin/server /opt/moin/ && \
-    cp -R /usr/local/share/moin/underlay /opt/moin/ && \
-    cp -avi /usr/local/lib/python2.7/dist-packages/MoinMoin/web/static/htdocs /opt/moin/static
+    mkdir /opt/moin/wiki && \
+    cp -R /usr/local/share/moin/data /opt/moin/wiki/ && \
+    cp -R /usr/local/share/moin/underlay /opt/moin/wiki/ && \
+    chown -R www-data:www-data /opt/moin/wiki/data && \
+    chown -R www-data:www-data /opt/moin/wiki/underlay
+
+#    cp -R /usr/local/share/moin/config /opt/moin/ && \
+#    cp -R /usr/local/share/moin/server /opt/moin/ && \
+#    cp -avi /usr/local/lib/python2.7/dist-packages/MoinMoin/web/static/htdocs /opt/moin/static
 
 # Add configuration.
-ADD uwsgi.ini /opt/
-ADD uwsgi_params /opt/
-ADD wikiconfig.py /opt/moin/config/
-ADD moin.wsgi /opt/moin/server/
+COPY uwsgi.ini /opt/
+COPY uwsgi_params /opt/
+COPY wikiconfig.py /opt/moin/
+COPY moin.wsgi /opt/moin/
 
 # Nginx config.
 RUN mkdir /etc/nginx/sites-available && \
     mkdir /etc/nginx/sites-enabled
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/
 COPY nginx-wiki.conf /etc/nginx/sites-available/
 RUN rm /etc/nginx/conf.d/default.conf && \
-    ln -s /etc/nginx/sites-available/nginx-pledge.conf \
-          /etc/nginx/sites-enabled/nginx-pledge.conf
+    ln -s /etc/nginx/sites-available/nginx-wiki.conf \
+          /etc/nginx/sites-enabled/nginx-wiki.conf
 
 # Supervisor config.
 COPY supervisord.conf /etc/supervisor/conf.d/supervisor.conf

@@ -20,7 +20,7 @@
 import sys, os
 
 sys.path.insert(0, '/usr/local/lib/python2.7/dist-packages/')
-sys.path.insert(0, '/usr/local/share/moin/')
+sys.path.insert(0, '/opt/moin/wiki')
 
 # a) Configuration of Python's code search path
 #    If you already have set up the PYTHONPATH environment variable for the
