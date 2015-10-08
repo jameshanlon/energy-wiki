@@ -11,7 +11,10 @@ RUN apt-get update && \
       python-setuptools \
       mysql-client \
       libmysqlclient-dev \
-      apache2-utils
+      apache2-utils \
+      supervisor
+RUN easy_install pip && \
+    pip install uwsgi
 
 # Moin Moin version.
 ENV MM_VERSION 1.9.8
@@ -25,15 +28,22 @@ RUN curl -LOC- -s \
     tar xf moin-$MM_VERSION.tar.gz -C moin --strip-components=1
 
 # Install MoinMoin.
-# Code package in /usr/local/lib/python2.7/dist-packages.
-# Rest of the Moin Moin data to /usr/local/share/moin.
 RUN (cd moin && \
      python setup.py install --record=install.log --force --prefix=/usr/local)
 
+# Create a new wiki instance.
+RUN mkdir /opt/moin && \
+    cp -R /usr/local/share/moin/config /opt/moin/ && \
+    cp -R /usr/local/share/moin/data /opt/moin/ && \
+    cp -R /usr/local/share/moin/server /opt/moin/ && \
+    cp -R /usr/local/share/moin/underlay /opt/moin/ && \
+    cp -avi /usr/local/lib/python2.7/dist-packages/MoinMoin/web/static/htdocs /opt/moin/static
+
 # Add configuration.
+ADD uwsgi.ini /opt/
 ADD uwsgi_params /opt/
-ADD wikiconfig.py /usr/local/share/moin/config/
-ADD moin.wsgi /usr/local/share/moin/server/
+ADD wikiconfig.py /opt/moin/config/
+ADD moin.wsgi /opt/moin/server/
 
 # Nginx config.
 RUN mkdir /etc/nginx/sites-available && \
@@ -43,3 +53,9 @@ COPY nginx-wiki.conf /etc/nginx/sites-available/
 RUN rm /etc/nginx/conf.d/default.conf && \
     ln -s /etc/nginx/sites-available/nginx-pledge.conf \
           /etc/nginx/sites-enabled/nginx-pledge.conf
+
+# Supervisor config.
+COPY supervisord.conf /etc/supervisor/conf.d/supervisor.conf
+
+EXPOSE 8000
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisor.conf"]
