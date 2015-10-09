@@ -35,7 +35,7 @@ class LocalConfig(multiconfig.DefaultConfig):
     DesktopEdition = True # give all local users full powers
     acl_rights_default = u"All:read,write,delete,revert,admin"
     surge_action_limits = None # no surge protection
-    sitename = u'MoinMoin DesktopEdition'
+    sitename = u'Energy wiki'
     logo_string = u'<img src="%s/common/moinmoin.png" alt="MoinMoin Logo">' % url_prefix_static
     # ^^^ DON'T TOUCH THIS EXCEPT IF YOU KNOW WHAT YOU DO ^^^
 
