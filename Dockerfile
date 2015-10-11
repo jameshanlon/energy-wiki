@@ -1,10 +1,12 @@
 FROM nginx
 MAINTAINER James Hanlon
 
+# Install packages.
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y \
       curl \
+      git \
       build-essential \
       python \
       python-dev \
@@ -31,25 +33,28 @@ RUN curl -LOC- -s \
 RUN (cd moin && \
      python setup.py install --record=install.log --force --prefix=/usr/local)
 
-# Create a new wiki instance and set permissions.
+# Create a new wiki instance.
 RUN mkdir /opt/moin && \
     mkdir /opt/moin/wiki && \
     mkdir /opt/moin/wiki/static && \
     cp -R /usr/local/share/moin/data /opt/moin/wiki/ && \
     cp -R /usr/local/share/moin/underlay /opt/moin/wiki/ && \
-    cp -avi /usr/local/lib/python2.7/dist-packages/MoinMoin/web/static/htdocs/* /opt/moin/wiki/static/
+    cp -R /usr/local/lib/python2.7/dist-packages/MoinMoin/web/static/htdocs/* \
+      /opt/moin/wiki/static/ && \
     chown -R www-data:www-data /opt/moin/wiki/data && \
     chown -R www-data:www-data /opt/moin/wiki/underlay && \
     chown -R www-data:www-data /opt/moin/wiki/static
 
-#    cp -R /usr/local/share/moin/config /opt/moin/ && \
-#    cp -R /usr/local/share/moin/server /opt/moin/ && \
-
 # Add configuration.
 COPY uwsgi.ini /opt/
 COPY uwsgi_params /opt/
-COPY wikiconfig.py /opt/moin/
+COPY wikiconfig.py /opt/moin/wiki/
 COPY moin.wsgi /opt/moin/
+
+# Install the memodump theme.
+RUN git clone https://github.com/dossist/moinmoin-memodump.git
+RUN cp moinmoin-memodump/memodump.py /opt/moin/wiki/data/plugin/theme/ && \
+    cp -R moinmoin-memodump/memodump /opt/moin/wiki/static/
 
 # Nginx config.
 RUN mkdir /etc/nginx/sites-available && \
