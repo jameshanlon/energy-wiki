@@ -66,5 +66,5 @@ RUN rm /etc/nginx/conf.d/default.conf && \
 # Supervisor config.
 COPY supervisord.conf /etc/supervisor/conf.d/supervisor.conf
 
-EXPOSE 8181
+EXPOSE 9090
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisor.conf"]

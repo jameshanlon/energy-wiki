@@ -8,4 +8,4 @@ check_context
 docker rm wiki
 docker build -t wiki ../
 docker create --name wiki \
-  -p 8181:8181 wiki
+  -p 9090:9090 wiki
