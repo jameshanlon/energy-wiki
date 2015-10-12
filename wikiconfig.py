@@ -65,17 +65,17 @@ class Config(multiconfig.DefaultConfig):
     # Wiki identity ----------------------------------------------------
 
     # Site name, used by default for wiki name-logo [Unicode]
-    sitename = u'Untitled Wiki'
+    sitename = u'Energy Wiki'
 
     # Wiki logo. You can use an image, text or both. [Unicode]
     # For no logo or text, use '' - the default is to show the sitename.
     # See also url_prefix setting below!
-    logo_string = u'<img src="%s/common/moinmoin.png" alt="MoinMoin Logo">' % url_prefix_static
+    logo_string = u'Energy Wiki'
 
     # name of entry page / front page [Unicode], choose one of those:
 
     # a) if most wiki content is in a single language
-    #page_front_page = u"MyStartingPage"
+    page_front_page = u"MyStartingPage"
 
     # b) if wiki content is maintained in many languages
     #page_front_page = u"FrontPage"
@@ -91,12 +91,12 @@ class Config(multiconfig.DefaultConfig):
 
     # This is checked by some rather critical and potentially harmful actions,
     # like despam or PackageInstaller action:
-    #superuser = [u"YourName", ]
+    superuser = [u"JamesHanlon", ]
 
     # IMPORTANT: grant yourself admin rights! replace YourName with
     # your user name. See HelpOnAccessControlLists for more help.
     # All acl_rights_xxx options must use unicode [Unicode]
-    #acl_rights_before = u"YourName:read,write,delete,revert,admin"
+    acl_rights_before = u"JamesHanlon:read,write,delete,revert,admin"
 
     # The default (ENABLED) password_checker will keep users from choosing too
     # short or too easy passwords. If you don't like this and your site has
@@ -168,5 +168,3 @@ class Config(multiconfig.DefaultConfig):
 
     # Enable graphical charts, requires gdchart.
     #chart_options = {'width': 600, 'height': 300}
-
-
