@@ -59,7 +59,7 @@ class Config(multiconfig.DefaultConfig):
     # If you run your wiki script at the root of your site (/), just do NOT
     # use this setting and it will automatically work.
     # If you run your wiki script at /mywiki, you need to use this:
-    #url_prefix_static = '/wiki' + url_prefix_static
+    url_prefix_static = '/wiki' + url_prefix_static
 
 
     # Wiki identity ----------------------------------------------------
