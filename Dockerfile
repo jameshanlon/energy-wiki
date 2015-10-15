@@ -11,6 +11,7 @@ RUN apt-get update && \
       python \
       python-dev \
       python-setuptools \
+      python-docutils \
       apache2-utils \
       supervisor
 RUN easy_install pip && \
@@ -41,16 +42,17 @@ RUN mkdir /opt/moin && \
     chown -R www-data:www-data /opt/moin/wiki/underlay && \
     chown -R www-data:www-data /opt/moin/wiki/static
 
-# Add configuration.
-COPY uwsgi.ini /opt/
-COPY uwsgi_params /opt/
-COPY init.sh /opt/
-COPY wikiconfig.py /opt/moin/wiki/
-COPY moin.wsgi /opt/moin/
-
 # Install the memodump theme.
 RUN git clone https://github.com/dossist/moinmoin-memodump.git
 RUN cp -R moinmoin-memodump/memodump /opt/moin/wiki/static/
+
+# Add configuration.
+COPY uwsgi.ini     /opt/
+COPY uwsgi_params  /opt/
+COPY CONFIG        /opt/
+COPY init.sh       /opt/
+COPY wikiconfig.py /opt/moin/wiki/
+COPY moin.wsgi     /opt/moin/
 
 # Nginx config.
 RUN mkdir /etc/nginx/sites-available && \

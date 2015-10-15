@@ -59,7 +59,7 @@ class Config(multiconfig.DefaultConfig):
     # If you run your wiki script at the root of your site (/), just do NOT
     # use this setting and it will automatically work.
     # If you run your wiki script at /mywiki, you need to use this:
-    #url_prefix_static = '/mywiki' + url_prefix_static
+    #url_prefix_static = '/wiki' + url_prefix_static
 
 
     # Wiki identity ----------------------------------------------------
@@ -75,7 +75,7 @@ class Config(multiconfig.DefaultConfig):
     # name of entry page / front page [Unicode], choose one of those:
 
     # a) if most wiki content is in a single language
-    page_front_page = u"MyStartingPage"
+    page_front_page = u"Home"
 
     # b) if wiki content is maintained in many languages
     #page_front_page = u"FrontPage"
@@ -168,3 +168,22 @@ class Config(multiconfig.DefaultConfig):
 
     # Enable graphical charts, requires gdchart.
     #chart_options = {'width': 600, 'height': 300}
+
+    # Backup options ----------------------------------------------------
+
+    # Who is allowed to perform remote backup, change this!
+    backup_users = ['JamesHanlon']
+
+    # What to backup
+    backup_include = [data_dir, data_underlay_dir] # this is the default value, see multiconfig.py
+
+    # Backup exclude - each file is matched against this list, any match will 
+    # be excluded from the backup. By default, cache files, python compiled modules 
+    # and various temporary files are excluded.
+    # BE CAREFUL: this stuff is used as a regex and therefore must be valid regexes.
+    #backup_exclude = [ # this is the default value, see multiconfig.py
+    #    r"(.+\.py(c|o)$)",
+    #    r"%(cache_dir)s",
+    #    r"%(/)spages%(/)s.+%(/)scache%(/)s[^%(/)s]+$" % {'/': os.sep},
+    #    r"%(/)s(edit-lock|event-log|\.DS_Store)$" % {'/': os.sep},
+    #]
